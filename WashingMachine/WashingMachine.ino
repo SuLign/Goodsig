@@ -70,6 +70,8 @@ int SigBefore = 0;
 /*定义OLED屏幕*/
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);
 
+/*串口监听*/
+
 /*多线程定义*/
 defineTask( Action );    //事务处理进程
 defineTask( Listener );  //监听进程
@@ -320,7 +322,7 @@ void WorkingFunction(int Index) {
     /*继续*/
     case 3:
       Action.resume();
-      if(washingStatus == 7) digitalWrite(MotorReg, HIGH);
+      if (washingStatus == 7) digitalWrite(MotorReg, HIGH);
       ListPageIndex = pageCache;
       OrderIndex = 1;
       SetupOrderList(ListPageIndex);
@@ -457,8 +459,8 @@ void OrderButtonFunction(int Signal) {
         break;
       /*编码 003  选项确定*/
       case 3:
-        
-        if(ListPageIndex == 2) WorkingFunction(3);
+
+        if (ListPageIndex == 2) WorkingFunction(3);
         else WorkingFunction(OrderIndex);
         break;
       default:
@@ -467,6 +469,71 @@ void OrderButtonFunction(int Signal) {
   }
 }
 
+//** III.串口通讯 部分-------------------------------------------
+//  1.基础功能
+//拒绝请求
+void Refuse() {
+  Serial.write(9);
+}
+//接受请求
+void Accept() {
+  Serial.write(10);
+}
+//处理请求
+void Request(int ReqID) {
+  if (washingStatus == 0) {
+    switch (ReqID) {
+      case 111:
+      case 112:
+      case 113:
+      case 121：
+        case 122:
+      case 123:
+        Accept();
+        DoFunction(ReqID);
+        break;
+      default:
+        Refuse();
+        break;
+    }
+  }
+  else if (washingStatus != 0) {
+    switch (ReqID) {
+      case 111:
+      case 112:
+      case 113:
+      case 121：
+        case 122:
+      case 123:
+        Refuse();
+        break;
+      case 1:
+      case 2:
+        Accept();
+        WorkingFunction(ReqID);
+      case 3:
+        if (ListPageIndex == 2) {
+          Accept();
+          WorkingFunction(ReqID);
+        }
+        else {
+          Refuse();
+        }
+        break;
+      case 9:
+        if (washingStatus == 9) {
+          Accept();
+        }
+        else {
+          Refuse();
+        }
+        break;
+      default:
+        Refuse();
+        break;
+    }
+  }
+}
 /*============================================================================================================================================================*/
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 //  线程进行内容
@@ -527,10 +594,10 @@ void Listener::loop() {  //监听循环
     tempStatus = washingStatus;
     Serial.println(washingStatus);
   }
-  if(washingStatus == 9){
+  if (washingStatus == 9) {
     WorkingFunction(9);
   }
-  
+
 }
 void setup() {
   Serial.begin(9600);

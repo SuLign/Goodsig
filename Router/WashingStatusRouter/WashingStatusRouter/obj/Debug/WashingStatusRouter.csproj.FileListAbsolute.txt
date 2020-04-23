@@ -12,3 +12,9 @@ C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\ob
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\WashingStatusRouter.csproj.GenerateResource.cache
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\WashingStatusRouter.exe
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\WashingStatusRouter.pdb
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\HslCommunication.dll
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\MQTTnet.dll
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\Newtonsoft.Json.dll
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\HslCommunication.xml
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\Newtonsoft.Json.xml
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\WashingStatusRouter.csproj.CopyComplete

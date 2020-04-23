@@ -19,12 +19,12 @@
             </UniformGrid>
             <TextBlock Margin="10" DockPanel.Dock="Top" Foreground="White" HorizontalAlignment="Center" FontSize="18" FontFamily="MingLiU-ExtB" FontWeight="Bold">洗衣机洗衣状态转发程序</TextBlock>
             <UniformGrid Margin="4" Columns="1" DockPanel.Dock="Bottom" x:Name="loader" Height="auto">
-                <TextBlock Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">服务器地址</TextBlock>
-                <TextBox Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
-                <TextBlock Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">用户名</TextBlock>
-                <TextBox Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
-                <TextBlock Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">密码</TextBlock>
-                <TextBox Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+                <TextBlock x:Name="ContentBox" Foreground="#FFF0F0F0" Padding="0" TextWrapping="WrapWithOverflow" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="MS Reference Sans Serif" FontSize="16">服务器地址</TextBlock>
+                <TextBox x:Name="serverid" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+                <TextBlock x:Name="userlabel" Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">用户名</TextBlock>
+                <TextBox x:Name="username" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+                <TextBlock x:Name="passlabel"  Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">密码</TextBlock>
+                <TextBox x:Name="password"  Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
             </UniformGrid>
         </DockPanel>
     </Grid>
