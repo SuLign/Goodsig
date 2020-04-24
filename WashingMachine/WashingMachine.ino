@@ -71,10 +71,13 @@ int SigBefore = 0;
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* clock=*/ SCL, /* data=*/ SDA, /* reset=*/ U8X8_PIN_NONE);
 
 /*串口监听*/
+String SerialRead = "";
+int logLen = 0;
 
 /*多线程定义*/
 defineTask( Action );    //事务处理进程
 defineTask( Listener );  //监听进程
+defineTask( ComSerial );   //串口通讯进程
 
 /*============================================================================================================================================================*/
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -473,21 +476,77 @@ void OrderButtonFunction(int Signal) {
 //  1.基础功能
 //拒绝请求
 void Refuse() {
-  Serial.write(9);
+  Serial.println("404");
 }
 //接受请求
 void Accept() {
-  Serial.write(10);
+  Serial.println("200");
 }
 //处理请求
+
+/*
+  void Request(String ReqID) {
+  if (washingStatus == 0) {
+    if (ReqID == "1") {
+      Accept();
+      DoFunction(111);
+    } else if (ReqID == "2") {
+      Accept();
+      DoFunction(112);
+    } else if (ReqID == "3") {
+      Accept();
+      DoFunction(113);
+    } else if (ReqID == "4") {
+      Accept();
+      DoFunction(121);
+    } else if (ReqID == "5") {
+      Accept();
+      DoFunction(122);
+    } else if (ReqID == "6") {
+      Accept();
+      DoFunction(123);
+    } else {
+      Refuse();
+    }
+  }
+  else if (washingStatus != 0) {  //暂停
+    if (ReqID == "7") {
+      Accept();
+      WorkingFunction(1);
+    } else if (ReqID == "8") {  //终止
+      Accept();
+      WorkingFunction(2);
+    } else if (ReqID == "9") {  //继续执行
+      if (ListPageIndex == 2) {
+        Accept();
+        WorkingFunction(3);
+      }
+      else {
+        Refuse();
+      }
+    } else if (ReqID == "0") {  //完成
+      if (washingStatus == 9) {
+        Accept();
+        WorkingFunction(9);
+      }
+      else {
+        Refuse();
+      }
+    } else {
+      Refuse();
+    }
+  }
+  }
+*/
 void Request(int ReqID) {
   if (washingStatus == 0) {
-    switch (ReqID) {
+    switch (ReqID)
+    {
       case 111:
       case 112:
       case 113:
-      case 121：
-        case 122:
+      case 121:
+      case 122:
       case 123:
         Accept();
         DoFunction(ReqID);
@@ -497,24 +556,18 @@ void Request(int ReqID) {
         break;
     }
   }
-  else if (washingStatus != 0) {
-    switch (ReqID) {
-      case 111:
-      case 112:
-      case 113:
-      case 121：
-        case 122:
-      case 123:
-        Refuse();
-        break;
+  else if (washingStatus != 0) {  //暂停
+    switch (ReqID)
+    {
       case 1:
       case 2:
         Accept();
         WorkingFunction(ReqID);
+        break;
       case 3:
         if (ListPageIndex == 2) {
           Accept();
-          WorkingFunction(ReqID);
+          WorkingFunction(3);
         }
         else {
           Refuse();
@@ -523,6 +576,7 @@ void Request(int ReqID) {
       case 9:
         if (washingStatus == 9) {
           Accept();
+          WorkingFunction(9);
         }
         else {
           Refuse();
@@ -540,7 +594,6 @@ void Request(int ReqID) {
 /*------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*============================================================================================================================================================*/
 void Action::setup() {   //事务处理设定
-  Serial.println(washingStatus);
   /*输入信号*/
   pinMode(WaterIn, INPUT);
   pinMode(WaterOut, INPUT);
@@ -559,6 +612,11 @@ void Listener::setup() {  //监听设定
   u8g2.setPowerSave(0);
   SetupOrderList(ListPageIndex);
   setOrder(OrderIndex);
+}
+
+void ComSerial::setup() {
+  Serial.begin(9600);
+  Serial.println(washingStatus);
 }
 
 void Action::loop() {   //事务处理循环
@@ -599,8 +657,21 @@ void Listener::loop() {  //监听循环
   }
 
 }
+
+void ComSerial::loop() {
+  if (Serial.available() > 0) {
+    while (Serial.available() > 0) {
+      SerialRead += char(Serial.read());
+      sleep(4);
+    }
+    if (SerialRead.length() > 0) {
+      Serial.println("nih");
+      Request(SerialRead.toInt());
+    }
+  }
+}
+
 void setup() {
-  Serial.begin(9600);
   // put your setup code here, to run once:
   mySCoop.start();
 }

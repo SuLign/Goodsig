@@ -13,8 +13,8 @@
         <DockPanel Background="#FF464646">
             <UniformGrid Columns="1" Width="105" DockPanel.Dock="Left" Background="#FF898989">
                 <Button Click="ConnectServer"  Margin="0,2" Content="连接服务器" BorderBrush="#FF747474" Background="#FF747474" Foreground="White" FontSize="16"/>
-                <Button Click="CheckCOM" Margin="0,2" Content="检查端口" BorderBrush="{x:Null}" Background="#FF747474" Foreground="White" FontSize="16"/>
-                <Button Click="Publish" Margin="0,2" Content="开始转发" Background="#FF747474" BorderBrush="{x:Null}" Foreground="White" FontSize="16"/>
+                <Button Click="CheckCOM" Name="CheckPort" IsEnabled="False" Margin="0,2" Content="检查端口" BorderBrush="{x:Null}" Background="#FF747474" Foreground="White" FontSize="16"/>
+                <Button Name="Publisher" IsEnabled="False" Click="Publish" Margin="0,2" Content="开始转发" Background="#FF747474" BorderBrush="{x:Null}" Foreground="White" FontSize="16" BorderThickness="1"/>
                 <Button Click="Exit" Margin="0,2" Content="退出" Background="#FF747474" BorderBrush="{x:Null}" Foreground="White" FontSize="16"/>
             </UniformGrid>
             <TextBlock Margin="10" DockPanel.Dock="Top" Foreground="White" HorizontalAlignment="Center" FontSize="18" FontFamily="MingLiU-ExtB" FontWeight="Bold">洗衣机洗衣状态转发程序</TextBlock>

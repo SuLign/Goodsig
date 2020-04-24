@@ -26,8 +26,9 @@ namespace WashingStatusRouter
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool StartRouting = false;
+        private bool startControl_1 = false, startControl_2 = false, startControl_3 = false;
         private string payload;
-
         public class PayloadMessage
         {
             string topic = "", message = "";
@@ -51,6 +52,8 @@ namespace WashingStatusRouter
                 return _backData;
             }
 
+           
+
             private static string Interpreter(PayloadMessage payload)
             {
                 string user = "";
@@ -68,34 +71,34 @@ namespace WashingStatusRouter
                 switch(payload.Message)
                 {
                     case "1":
-                        status = "Input water";
+                        status = "正在进水";
                         break;
                     case "2":
-                        status = "jinshuiwancheng";
+                        status = "进水完成";
                         break;
                     case "3":
-                        status = "zhengzaixiyi";
+                        status = "正在洗衣";
                         break;
                     case "4":
-                        status = "xiyiwancheng";
+                        status = "洗衣完成";
                         break;
                     case "5":
-                        status = "zhengzai paishui";
+                        status = "正在排水";
                         break;
                     case "6":
-                        status = "paishui wancheng";
+                        status = "排水完成";
                         break;
                     case "7":
-                        status = "zhengzai shuaigan ";
+                        status = "正在甩干";
                         break;
                     case "8":
-                        status = "tuo shui wan cheng";
+                        status = "甩干完成";
                         break;
                     case "9":
-                        status = "Done!";
+                        status = "洗衣完成";
                         break;
                     case "0":
-                        status = "Waiting...";
+                        status = "待机中";
                         break;
                 }
                 return user + " : " + status;
@@ -132,11 +135,16 @@ namespace WashingStatusRouter
         {
             
         }
-        PubSubClient pubSub;
+        public PubSubClient pubSub;
+        public SerialReadAndWrite serial;
         public MainWindow()
         {
             InitializeComponent();
             pubSub = new PubSubClient(this);
+        }
+        public void SendMsg(string topic, string message)
+        {
+            pubSub.SendMessage(topic, message);
         }
         static byte[] pass = Encoding.UTF8.GetBytes("passwd");
         
@@ -148,6 +156,7 @@ namespace WashingStatusRouter
 
         private void ConnectServer(object sender, RoutedEventArgs e)
         {
+            CheckPort.IsEnabled = true;
             pubSub.Init();
         }
 
@@ -158,12 +167,13 @@ namespace WashingStatusRouter
 
         private void Publish(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            StartRouting = true;
         }
 
         private void CheckCOM(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            serial = new SerialReadAndWrite(this);
+            Publisher.IsEnabled = true;
         }
     }
 }
