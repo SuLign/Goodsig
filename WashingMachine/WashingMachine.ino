@@ -483,61 +483,6 @@ void Accept() {
   Serial.println("200");
 }
 //处理请求
-
-/*
-  void Request(String ReqID) {
-  if (washingStatus == 0) {
-    if (ReqID == "1") {
-      Accept();
-      DoFunction(111);
-    } else if (ReqID == "2") {
-      Accept();
-      DoFunction(112);
-    } else if (ReqID == "3") {
-      Accept();
-      DoFunction(113);
-    } else if (ReqID == "4") {
-      Accept();
-      DoFunction(121);
-    } else if (ReqID == "5") {
-      Accept();
-      DoFunction(122);
-    } else if (ReqID == "6") {
-      Accept();
-      DoFunction(123);
-    } else {
-      Refuse();
-    }
-  }
-  else if (washingStatus != 0) {  //暂停
-    if (ReqID == "7") {
-      Accept();
-      WorkingFunction(1);
-    } else if (ReqID == "8") {  //终止
-      Accept();
-      WorkingFunction(2);
-    } else if (ReqID == "9") {  //继续执行
-      if (ListPageIndex == 2) {
-        Accept();
-        WorkingFunction(3);
-      }
-      else {
-        Refuse();
-      }
-    } else if (ReqID == "0") {  //完成
-      if (washingStatus == 9) {
-        Accept();
-        WorkingFunction(9);
-      }
-      else {
-        Refuse();
-      }
-    } else {
-      Refuse();
-    }
-  }
-  }
-*/
 void Request(int ReqID) {
   if (washingStatus == 0) {
     switch (ReqID)
@@ -615,7 +560,7 @@ void Listener::setup() {  //监听设定
 }
 
 void ComSerial::setup() {
-  Serial.begin(9600);
+  
   Serial.println(washingStatus);
 }
 
@@ -659,24 +604,28 @@ void Listener::loop() {  //监听循环
 }
 
 void ComSerial::loop() {
-  if (Serial.available() > 0) {
-    while (Serial.available() > 0) {
-      SerialRead += char(Serial.read());
-      sleep(4);
-    }
-    if (SerialRead.length() > 0) {
-      Serial.println("nih");
-      Request(SerialRead.toInt());
-    }
-  }
+  
 }
 
 void setup() {
+  Serial.begin(9600);
+  
   // put your setup code here, to run once:
   mySCoop.start();
 }
 
 void loop() {
+  if (Serial.available() > 0) {
+    String readout ="";
+    while (Serial.available() > 0) {
+      readout += char(Serial.read());
+      delay(2);
+    }
+    if (readout.length() > 0) {
+      Serial.println(readout);
+      Request(readout.toInt());
+    }
+  }
   // put your main code here, to run repeatedly:
   yield();
 }
