@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-
-using System.Threading.Tasks;
-using MQTTnet.Client.Options;
 using HslCommunication.MQTT;
 using HslCommunication;
 using System.Threading;
@@ -12,7 +7,7 @@ using System.IO.Ports;
 
 namespace WashingStatusRouter
 {
-    public class PubSubClient
+    public class PubSubClientTemp
     {
         private MqttClient client = null;
         string message;
@@ -23,7 +18,7 @@ namespace WashingStatusRouter
         }
 
         MainWindow window = null;
-        public PubSubClient(MainWindow window)
+        public PubSubClientTemp(MainWindow window)
         {
             this.window = window;
         }

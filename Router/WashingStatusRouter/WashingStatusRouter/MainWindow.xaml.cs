@@ -135,12 +135,12 @@ namespace WashingStatusRouter
         {
             
         }
-        public PubSubClient pubSub;
+        public PubSubClientTemp pubSub;
         public SerialReadAndWrite serial;
         public MainWindow()
         {
             InitializeComponent();
-            pubSub = new PubSubClient(this);
+            pubSub = new PubSubClientTemp(this);
         }
         public void SendMsg(string topic, string message)
         {

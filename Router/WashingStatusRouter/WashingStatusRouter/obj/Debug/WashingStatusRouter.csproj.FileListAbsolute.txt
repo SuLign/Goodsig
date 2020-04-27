@@ -18,3 +18,6 @@ C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bi
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\HslCommunication.xml
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\bin\Debug\Newtonsoft.Json.xml
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\WashingStatusRouter.csproj.CopyComplete
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\HomeWindow.g.cs
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\HomeWindow.baml
+C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\obj\Debug\App.baml

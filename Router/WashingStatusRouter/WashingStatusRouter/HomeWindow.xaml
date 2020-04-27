@@ -1,0 +1,48 @@
+﻿<Window x:Class="WashingStatusRouter.GUI.HomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WashingStatusRouter.GUI"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Title="洗衣机串口转发器" Height="300" Width="500" Background="#FF747474">
+    <Grid>
+        <DockPanel>
+            <UniformGrid Columns="1" Width="150" DockPanel.Dock="Left">
+                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                    <Button.Content>
+                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="连接MQTT服务器"/>
+                    </Button.Content>
+                </Button>
+                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                    <Button.Content>
+                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="检查串口"/>
+                    </Button.Content>
+                </Button>
+                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                    <Button.Content>
+                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="开始转发"/>
+                    </Button.Content>
+                </Button>
+                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
+                    <Button.Content>
+                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="退出"/>
+                    </Button.Content>
+                </Button>
+            </UniformGrid>
+            <TextBlock Style="{StaticResource Title}">洗衣机洗衣状态转发程序</TextBlock>
+            <UniformGrid Margin="4" Columns="1" DockPanel.Dock="Bottom" x:Name="loader" Height="auto">
+                <TextBlock x:Name="ContentBox" Style="{StaticResource Label}">服务器地址</TextBlock>
+                <TextBox x:Name="serverid" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+                <TextBlock x:Name="userlabel" Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">用户名</TextBlock>
+                <TextBox x:Name="username" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+                <TextBlock x:Name="passlabel"  Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">密码</TextBlock>
+                <TextBox x:Name="password"  Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
+            </UniformGrid>
+        </DockPanel>
+        
+    </Grid>
+</Window>
