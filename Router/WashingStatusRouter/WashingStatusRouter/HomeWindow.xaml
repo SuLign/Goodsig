@@ -3,46 +3,89 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local1="clr-namespace:WashingStatusRouter.GUIModule"
         xmlns:local="clr-namespace:WashingStatusRouter.GUI"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="洗衣机串口转发器" Height="300" Width="500" Background="#FF747474">
+        Title="洗衣机串口转发器" Height="500" Width="800" Background="White">
     <Grid>
-        <DockPanel>
-            <UniformGrid Columns="1" Width="150" DockPanel.Dock="Left">
-                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
-                    <Button.Content>
-                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="连接MQTT服务器"/>
-                    </Button.Content>
-                </Button>
-                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
-                    <Button.Content>
-                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="检查串口"/>
-                    </Button.Content>
-                </Button>
-                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
-                    <Button.Content>
-                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="开始转发"/>
-                    </Button.Content>
-                </Button>
-                <Button BorderBrush="{x:Null}" Foreground="{x:Null}" >
-                    <Button.Content>
-                        <TextBlock Foreground="White" FontFamily="Microsoft YaHei Light" Margin="0,0,0,0" VerticalAlignment="Center" FontSize="15"  HorizontalAlignment="Center" TextAlignment="Center" Text="退出"/>
-                    </Button.Content>
-                </Button>
-            </UniformGrid>
-            <TextBlock Style="{StaticResource Title}">洗衣机洗衣状态转发程序</TextBlock>
-            <UniformGrid Margin="4" Columns="1" DockPanel.Dock="Bottom" x:Name="loader" Height="auto">
-                <TextBlock x:Name="ContentBox" Style="{StaticResource Label}">服务器地址</TextBlock>
-                <TextBox x:Name="serverid" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
-                <TextBlock x:Name="userlabel" Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">用户名</TextBlock>
-                <TextBox x:Name="username" Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
-                <TextBlock x:Name="passlabel"  Foreground="#FFF0F0F0" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Monotype Corsiva" FontSize="16">密码</TextBlock>
-                <TextBox x:Name="password"  Background="{x:Null}" Foreground="White" BorderBrush="#7F999999" FontSize="20" TextAlignment="Center"></TextBox>
-            </UniformGrid>
-        </DockPanel>
-        
+        <!-- simplest form -->
+        <Button Margin="745,0,0,445" Click="Exit" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="关闭">
+            <materialDesign:PackIcon Kind="ExitToApp" Foreground="Red" />
+        </Button>
+        <materialDesign:Transitioner x:Name="HomePageTransitioner"  SelectedIndex="0"  AutoApplyTransitionOrigins="True">
+            <Grid>
+                <local1:ComSerial/>
+            </Grid>
+            <materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide.BackwardWipe>
+                    <materialDesign:CircleWipe/>
+                </materialDesign:TransitionerSlide.BackwardWipe>
+                <materialDesign:TransitionerSlide.ForwardWipe>
+                    <materialDesign:SlideWipe Direction="Right"/>
+                </materialDesign:TransitionerSlide.ForwardWipe>
+                <local1:MessageHall/>
+            </materialDesign:TransitionerSlide>
+        </materialDesign:Transitioner>
+        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="SnackbarThree" />
     </Grid>
+    <Window.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#FF1A75CB"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Button.IsMouseOver" Value="True">
+                    <Setter Property="Button.Background" Value="#FF4A95EB" />
+                </Trigger>
+                <Trigger Property="Button.IsPressed" Value="True">
+                    <Setter Property="Button.Background" Value="#FF202F42" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="BtnContent">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Microsoft YaHei Light"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Title">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="DockPanel.Dock" Value="Top"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="MingLiU-ExtB"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Label">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#FFF0F0F0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="MS Reference Sans Serif"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="InputBox">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#7F999999"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
 </Window>

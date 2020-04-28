@@ -10,7 +10,7 @@ namespace WashingStatusRouter.Functions
     class PubSubClient
     {
         private MqttClient client = null;
-        private GUI.HomeWindow window = null;
+        //private GUI.HomeWindow window = null;
         private ReceiveMessage ReceiveMessageAction;
         public delegate void ReceiveMessage(string Topic, string Message);
         public ReceiveMessage GetReceive
@@ -21,11 +21,15 @@ namespace WashingStatusRouter.Functions
         /// 创建一个通讯服务并绑定当前窗口
         /// </summary>
         /// <param name="window">目标窗口</param>
-        public PubSubClient(GUI.HomeWindow window)
-        {
-            this.window = window;
-        }
-
+        //public PubSubClient(GUI.HomeWindow window)
+        //{
+        //    this.window = window;
+        //}
+        public PubSubClient(){}
+        //public void SetWindow(GUI.HomeWindow window)
+        //{
+        //    this.window = window;
+        //}
         /// <summary>
         /// 连接MQTT服务器
         /// </summary>

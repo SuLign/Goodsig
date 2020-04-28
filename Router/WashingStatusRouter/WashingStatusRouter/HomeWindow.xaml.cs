@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using WashingStatusRouter.Functions;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -22,6 +23,13 @@ namespace WashingStatusRouter.GUI
         public HomeWindow()
         {
             InitializeComponent();
+            //var MessageQueue = SnackbarThree.MessageQueue;
+            //Task.Factory.StartNew(() => MessageQueue.Enqueue("欢迎您！"));
+        }
+        public void Exit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
+
 }

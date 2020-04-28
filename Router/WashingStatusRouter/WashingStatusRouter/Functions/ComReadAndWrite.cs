@@ -10,26 +10,26 @@ namespace WashingStatusRouter.Functions
 {
     class ComReadAndWrite
     {
-        private GUI.HomeWindow window;
         private SerialPort ComPort;
         private string[] coms;
         private ReceiveMessage ReceiveMessageAction;
         public delegate void ReceiveMessage(string Message);
-
+        public void ReceiveActionSet(ReceiveMessage receive) 
+        {
+            ReceiveMessageAction = receive;
+        }
         public string[] ComSerialPort
         {
             get { return coms; }
         }
  
-        RegistryKey registry = Registry.LocalMachine.OpenSubKey("Hardware//DeviceMap//SerialComm");
         /// <summary>
         /// 创建串口监听实例
         /// </summary>
         /// <param name="window"></param>
-        public ComReadAndWrite(GUI.HomeWindow window)
+        public ComReadAndWrite()
         {
-            coms = registry.GetValueNames();
-            this.window = window;
+            coms = SerialPort.GetPortNames();
         }
         /// <summary>
         /// 选择端口

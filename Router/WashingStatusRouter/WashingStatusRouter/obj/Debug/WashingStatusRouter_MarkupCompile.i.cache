@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\StLig\Desktop\ProDoct\Router\WashingStatusRouter\WashingStatusRouter\App.xaml
-2-259935290
+6-894950333
 
-12729776666
-1221904287786
-HomeWindow.xaml;MainWindow.xaml;
+18-1567760300
+124-1532821079
+GUIModule\ComSerial.xaml;GUIModule\LoginController.xaml;GUIModule\LoginUserName.xaml;GUIModule\MessageHall.xaml;HomeWindow.xaml;Login.xaml;
 
-False
+True
 
