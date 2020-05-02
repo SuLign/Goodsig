@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace WashingStatusRouter.Functions
 {
@@ -26,10 +22,10 @@ namespace WashingStatusRouter.Functions
             client = new PubSubClient();
             return (client.Connect("MiddleWare", ServerIPAddress, UserName, Password));
         }
-        public void SetCallBack(PubSubClient.ReceiveMessage receive)
-        {
-            client.GetReceive = receive;
-        }
+        //public void SetCallBack(PubSubClient.ReceiveMessage receive)
+        //{
+        //    client.GetReceive = receive;
+        //}
     }
     class AMiddle
     {

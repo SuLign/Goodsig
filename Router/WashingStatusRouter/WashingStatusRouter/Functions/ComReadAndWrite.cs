@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Microsoft.Win32;
-using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Threading;
 
@@ -15,30 +11,20 @@ namespace WashingStatusRouter.Functions
         bool Connected = false;
         private string[] coms;
         public delegate void ReceiveMessage(string Message);
-        public void ReceiveActionSet(ReceiveMessage receive)
+        public delegate void AsDisposed();
+        public void AsDisposedHandle(AsDisposed asDisposed)
         {
-            ReceiveMessageAction = receive;
+            disposed += asDisposed;
         }
         public string[] ComSerialPort
         {
             get { return coms; }
         }
-
-        /// <summary>
-        /// 创建串口监听实例
-        /// </summary>
-        /// <param name="window"></param>
         public ComReadAndWrite()
         {
             Connected = false;
             coms = SerialPort.GetPortNames();
         }
-        /// <summary>
-        /// 选择端口
-        /// </summary>
-        /// <param name="Port"></param>
-        /// <param name="BaudRate"></param>
-        /// <returns></returns>
         public bool DetectPort(string Port, int BaudRate)
         {
             ComPort = new SerialPort(Port);
@@ -47,6 +33,7 @@ namespace WashingStatusRouter.Functions
             {
                 ComPort.Open();
                 ComPort.DataReceived += Listening;
+                ComPort.ErrorReceived += Disposed;
                 if (!Connected)
                 {
                     ComPort.Write("100");
@@ -60,12 +47,6 @@ namespace WashingStatusRouter.Functions
                 return false;
             }
         }
-
-        /// <summary>
-        /// 串口发送数据
-        /// </summary>
-        /// <param name="Data"></param>
-        /// <returns></returns>
         public bool SendDataToComPort(string Data)
         {
             try
@@ -78,11 +59,6 @@ namespace WashingStatusRouter.Functions
                 return false;
             }
         }
-        /// <summary>
-        /// 接收消息处理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Listening(object sender, SerialDataReceivedEventArgs e)
         {
             try
@@ -90,8 +66,6 @@ namespace WashingStatusRouter.Functions
                 byte[] buffer = new byte[ComPort.BytesToRead];
                 Console.WriteLine("Bytes length:" + ComPort.BytesToRead.ToString());
                 ComPort.Read(buffer, 0, ComPort.BytesToRead);
-                Console.WriteLine(Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", ""));
-                Console.WriteLine(Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", ""));
                 if (!Connected)
                 {
                     if (Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", "") == "Y")
@@ -114,5 +88,15 @@ namespace WashingStatusRouter.Functions
             MessageDetecter detecter = new MessageDetecter(Message);
             MQTTEventTrigger.Client.SendMessage(detecter.TopicToMQTTServer, detecter.MessageToMQTTServer);
         });
+        private AsDisposed disposed;
+        private void Disposed(object sender, EventArgs e)
+        {
+            disposed();
+        }
+        public void DisposeCom()
+        {
+            ComPort.Close();
+            ComPort.Dispose();
+        }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using WashingStatusRouter.GUI;
-using WashingStatusRouter.GUIModule;
-using WashingStatusRouter.Functions;
-using System.Text;
+﻿using WashingStatusRouter.GUIModule;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;

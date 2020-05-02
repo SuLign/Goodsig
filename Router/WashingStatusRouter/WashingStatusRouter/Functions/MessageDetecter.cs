@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WashingStatusRouter.Functions
 {
@@ -11,10 +7,10 @@ namespace WashingStatusRouter.Functions
         private string id;
         private string topic;
         private string result;
-        public string ResultToDisplayBack
-        {
-            get { return result; }
-        }
+        //public string ResultToDisplayBack
+        //{
+        //    get { return result; }
+        //}
         public string MessageToMQTTServer
         {
             get { return id; }
@@ -23,11 +19,6 @@ namespace WashingStatusRouter.Functions
         {
             get { return "Arduino" + topic; }
         }
-        /// <summary>
-        /// 解码串口信号
-        /// </summary>
-        /// <param name="Param"></param>
-        /// <returns></returns>
         public MessageDetecter(string Param)
         {
             id = Param;

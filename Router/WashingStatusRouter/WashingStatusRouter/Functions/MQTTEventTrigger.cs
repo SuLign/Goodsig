@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WashingStatusRouter.Functions;
-using System.Threading.Tasks;
 
 namespace WashingStatusRouter.Functions
 {
@@ -19,6 +14,22 @@ namespace WashingStatusRouter.Functions
             MQTTEventTrigger.home = home;
             Client = client;
             Client.GetReceive = CallBack;
+        }
+        public static void DisposeCom()
+        {
+            try
+            {
+                ReadAndWrite.DisposeCom();
+            }
+            catch { }
+        }
+        public static void DisposeMQTT()
+        {
+            try
+            {
+                Client.Dispose();
+            }
+            catch { }
         }
         public static void LoadSerialPort(ComReadAndWrite com)
         {

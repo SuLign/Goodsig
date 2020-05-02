@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using WashingStatusRouter.Functions;
 using System.Runtime.InteropServices;
 
 namespace WashingStatusRouter
@@ -20,6 +21,15 @@ namespace WashingStatusRouter
             ReleaseCapture();
             SendMessage(hwnd, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
         }
-
+        public static void Exit()
+        {
+            try
+            {
+                MQTTEventTrigger.DisposeCom();
+                MQTTEventTrigger.DisposeMQTT();
+            }
+            catch { }
+            Application.Current.Shutdown();
+        }
     }
 }

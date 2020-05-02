@@ -1,27 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using MaterialDesignThemes;
-using MaterialDesignColors;
 using System.Windows.Input;
 using WashingStatusRouter.Functions;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using WashingStatusRouter.GUI;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WashingStatusRouter.GUIModule
 {
-    /// <summary>
-    /// ComSerial.xaml 的交互逻辑
-    /// </summary>
     public partial class ComSerial : UserControl
     {
         ComReadAndWrite coms;
@@ -29,8 +14,15 @@ namespace WashingStatusRouter.GUIModule
         {
             coms = new ComReadAndWrite();
             InitializeComponent();
+            coms.AsDisposedHandle(new ComReadAndWrite.AsDisposed(AsComDisposed));
         }
-
+        public void AsComDisposed()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                AMiddle.home.SnackbarThree.MessageQueue.Enqueue("串口读取错误");
+            });
+        }
         private void ComSelector_GotMouseCapture(object sender, MouseEventArgs e)
         {
             try
@@ -47,7 +39,6 @@ namespace WashingStatusRouter.GUIModule
             }
 
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (coms != null && ComSelector.SelectedItem != null)
@@ -78,7 +69,6 @@ namespace WashingStatusRouter.GUIModule
                 });
             }
         }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             AMiddle.home.HomePageTransitioner.SelectedIndex = 1;
