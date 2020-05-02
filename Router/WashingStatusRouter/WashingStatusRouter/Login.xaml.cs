@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WashingStatusRouter.Functions;
 using System.Windows.Shapes;
 
 namespace WashingStatusRouter
@@ -23,10 +24,19 @@ namespace WashingStatusRouter
         {
             InitializeComponent();
             Functions.AMiddle.InitLoginWindow(this);
+            if (!App.ReadStatus)
+            {
+                SnackbarThree.MessageQueue.Enqueue("加载用户配置文件错误");
+            }
         }
         public void Exit(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            FormFunction.MoveForm(sender, e, this);
         }
     }
 }

@@ -31,9 +31,9 @@
         </UniformGrid>
         <Button 
                 Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                Margin="300,300,300,10"
-                Style="{StaticResource MaterialDesignOutlinedButton}" Foreground="Red" BorderBrush="#FFCBCBCB">
-            <materialDesign:PackIcon  Kind="ArrowBack" Foreground="Red" />
+                Margin="0,300,600,10"
+                Style="{StaticResource MaterialDesignIconForegroundButton}" Foreground="Red" BorderBrush="#FFCBCBCB" Background="{x:Null}">
+            <materialDesign:PackIcon  Kind="ArrowLeftCircleOutline" Foreground="#FF636363" />
         </Button>
     </Grid>
 </UserControl>

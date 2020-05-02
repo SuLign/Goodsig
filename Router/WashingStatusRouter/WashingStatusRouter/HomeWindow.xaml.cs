@@ -30,6 +30,14 @@ namespace WashingStatusRouter.GUI
         {
             Application.Current.Shutdown();
         }
-    }
+        public void Setting(object sender, RoutedEventArgs e)
+        {
+            HomePageTransitioner.SelectedIndex = HomePageTransitioner.SelectedIndex == 1?0:1;
+        }
 
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            FormFunction.MoveForm(sender, e, this);
+        }
+    }
 }

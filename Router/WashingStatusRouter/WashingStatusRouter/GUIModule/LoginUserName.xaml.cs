@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using WashingStatusRouter.Functions;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -23,14 +24,23 @@ namespace WashingStatusRouter.GUIModule
         public LoginUserName()
         {
             InitializeComponent();
+            if (Configurations.UserIsSaved)
+            {
+                UserName.Text = Configurations.Username;
+                PasswordBox.Password = Configurations.Password;
+                RemmenberPassword.IsChecked = true;
+            }
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Functions.AMiddle.Middle.UserName = UserName.Text;
             Functions.AMiddle.Middle.Password = PasswordBox.Password;
             Functions.AMiddle.StartConnection();
-            Console.WriteLine(Functions.AMiddle.Middle.ServerIPAddress + ":" + Functions.AMiddle.Middle.Port + "/" + Functions.AMiddle.Middle.UserName + "/" + Functions.AMiddle.Middle.Password);
+            if ((bool)RemmenberPassword.IsChecked)
+            {
+                Configurations.SaveUserInfo(UserName.Text, PasswordBox.Password);
+                Configurations.SaveLoadInfo();
+            }
         }
     }
 }

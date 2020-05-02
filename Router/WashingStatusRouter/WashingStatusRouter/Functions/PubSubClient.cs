@@ -4,6 +4,7 @@ using HslCommunication.MQTT;
 using HslCommunication;
 using System.Threading;
 using System.IO.Ports;
+using System.Windows.Media;
 
 namespace WashingStatusRouter.Functions
 {
@@ -11,12 +12,8 @@ namespace WashingStatusRouter.Functions
     {
         private MqttClient client = null;
         //private GUI.HomeWindow window = null;
-        private ReceiveMessage ReceiveMessageAction;
         public delegate void ReceiveMessage(string Topic, string Message);
-        public ReceiveMessage GetReceive
-        {
-            set { ReceiveMessageAction = value; }
-        }
+        public ReceiveMessage GetReceive;
         /// <summary>
         /// 创建一个通讯服务并绑定当前窗口
         /// </summary>
@@ -78,12 +75,11 @@ namespace WashingStatusRouter.Functions
         {
             client.SubscribeMessage(Topics);
         }
-
         private void ReceiveMsg(string topic, byte[] payload)
         {
-            ReceiveMessageAction(topic, Encoding.UTF8.GetString(payload));
-        }
 
+            GetReceive(topic, Encoding.UTF8.GetString(payload));
+        }
         /// <summary>
         /// 发送消息
         /// </summary>

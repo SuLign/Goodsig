@@ -10,19 +10,35 @@
     <Grid>
         <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="SnackbarThree" />
         <DockPanel Margin="0,55,0,0">
-            <ListBox DockPanel.Dock="Left" x:Name="MessageBox" Width="600" Margin="0 16 0 16" ItemsSource="{Binding DemoItems}">
-                <ListBox.Resources>
-                    <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
-                </ListBox.Resources>
-                <ListBox.ItemTemplate>
-                    <DataTemplate DataType="domain:DemoItem">
-                        <TextBlock Text="{Binding Name}" Margin="32 0 32 0" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <materialDesign:Card Margin="10" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth1" Padding="32">
-                DEPTH 1
-            </materialDesign:Card>
+            <GroupBox materialDesign:ColorZoneAssist.Mode="PrimaryDark"  Width="500" Header="消息窗口" Margin="10" Style="{DynamicResource MaterialDesignCardGroupBox}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="MessageList">
+                    </StackPanel>
+                </ScrollViewer>
+            </GroupBox>
+            <GroupBox Margin="10" Style="{DynamicResource MaterialDesignCardGroupBox}" Header="运行状态" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <UniformGrid Columns="1">
+                    <UniformGrid Columns="2" Margin="0,0,0,59" Width="226">
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Foreground="#FF474747">端口</TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Name="Ports" TextAlignment="Right"></TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Foreground="#FF474747">服务器地址</TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Name="ServerIP" TextAlignment="Right"></TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Foreground="#FF474747">服务器端口</TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Name="ServerPort" TextAlignment="Right"></TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignBody2TextBlock}" Foreground="#FF474747">洗衣机当前状态</TextBlock>
+                        <TextBlock Style="{StaticResource MaterialDesignButtonTextBlock}" Name="NowStatus" TextAlignment="Right" Foreground="Red">不在线</TextBlock>
+                    </UniformGrid>
+                    <UniformGrid Columns="1">
+                        
+                        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" materialDesign:ShadowAssist.ShadowEdges="Top" Padding="32">
+                            <StackPanel>
+                                <TextBlock Height="30" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" TextAlignment="Center">当前正在执行</TextBlock>
+                                <TextBlock Height="auto" Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Name="Ondoing" TextWrapping="Wrap"></TextBlock>
+                            </StackPanel>
+                        </materialDesign:Card>
+                    </UniformGrid>
+                </UniformGrid>
+            </GroupBox>
         </DockPanel>
     </Grid>
 </UserControl>

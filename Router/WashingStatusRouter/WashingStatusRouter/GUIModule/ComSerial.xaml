@@ -19,14 +19,28 @@
             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
             materialDesign:HintAssist.HelperText="下拉选择串口">
             </ComboBox>
-            <Button
-            x:Name="ConnectWithSerialPort"
-            Click="Button_Click"
-            Style="{StaticResource MaterialDesignRaisedDarkButton}"
-            Width="100"
-            ToolTip="Resource name: MaterialDesignRaisedLightDarkButton" Background="#FF5F0909" BorderBrush="{x:Null}">
-                _确定
-            </Button>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button
+                    x:Name="ConnectWithSerialPort"
+                    IsEnabled="False"
+                    Click="Button_Click"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Width="100"
+                    Margin="50,0"
+                    ToolTip="确定" Background="#FF5F0909" BorderBrush="{x:Null}">
+                    _确定
+                </Button>
+                <Button
+                    Click="Button_Click_1"
+                    Margin="50,0"
+                    IsEnabled="True"
+                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                    Width="100"
+                    Background="#FF5F0909" BorderBrush="{x:Null}">
+                    _返回
+                </Button>
+            </StackPanel>
+            
         </UniformGrid>
     </Grid>
 </UserControl>

@@ -10,7 +10,8 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="洗衣机串口转发器" Height="400" Width="700" Background="White">
+        MouseDown="Window_MouseDown"
+        Title="登录" Height="400" Width="700" Background="White">
     <Grid>
         <Button Margin="640,0,0,340" Click="Exit" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="关闭">
                     <materialDesign:PackIcon Kind="ExitToApp" Foreground="Red" />
@@ -30,6 +31,6 @@
             </materialDesign:TransitionerSlide>
         </materialDesign:Transitioner>
         <ProgressBar x:Name="ProgressLine" Margin="0,390,0,0" IsIndeterminate="False" Visibility="Hidden" Background="#FFD89393" Foreground="Red" />
-        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="SnackbarThree" />
+        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="SnackbarThree" Background="#FF3C0303" />
     </Grid>
 </Window>

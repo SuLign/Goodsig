@@ -21,7 +21,7 @@ namespace WashingStatusRouter.Functions
         }
         public string TopicToMQTTServer
         {
-            get { return "Arduino/" + topic; }
+            get { return "Arduino" + topic; }
         }
         /// <summary>
         /// 解码串口信号

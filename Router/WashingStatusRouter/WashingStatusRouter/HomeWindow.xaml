@@ -10,11 +10,16 @@
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="洗衣机串口转发器" Height="500" Width="800" Background="White">
+        MouseDown="Window_MouseDown"
+        Title="洗衣机串口转发器V1.0" Height="500" Width="800" Background="White">
     <Grid>
         <!-- simplest form -->
         <Button Margin="745,0,0,445" Click="Exit" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="关闭">
             <materialDesign:PackIcon Kind="ExitToApp" Foreground="Red" />
+        </Button>
+        <TextBlock Margin="100,10,200,445" Style="{StaticResource MaterialDesignHeadline4TextBlock}" FontWeight="Bold" Foreground="#FF4F4F4F">洗衣机串口转发器</TextBlock>
+        <Button Margin="0,0,740,445" Click="Setting" Style="{StaticResource MaterialDesignIconForegroundButton}" ToolTip="设置">
+            <materialDesign:PackIcon Kind="DotsVertical" Foreground="Red" />
         </Button>
         <materialDesign:Transitioner x:Name="HomePageTransitioner"  SelectedIndex="0"  AutoApplyTransitionOrigins="True">
             <Grid>

@@ -5,16 +5,17 @@ using System.Text;
 using Microsoft.Win32;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Threading;
 
 namespace WashingStatusRouter.Functions
 {
     class ComReadAndWrite
     {
         private SerialPort ComPort;
+        bool Connected = false;
         private string[] coms;
-        private ReceiveMessage ReceiveMessageAction;
         public delegate void ReceiveMessage(string Message);
-        public void ReceiveActionSet(ReceiveMessage receive) 
+        public void ReceiveActionSet(ReceiveMessage receive)
         {
             ReceiveMessageAction = receive;
         }
@@ -22,13 +23,14 @@ namespace WashingStatusRouter.Functions
         {
             get { return coms; }
         }
- 
+
         /// <summary>
         /// 创建串口监听实例
         /// </summary>
         /// <param name="window"></param>
         public ComReadAndWrite()
         {
+            Connected = false;
             coms = SerialPort.GetPortNames();
         }
         /// <summary>
@@ -45,7 +47,13 @@ namespace WashingStatusRouter.Functions
             {
                 ComPort.Open();
                 ComPort.DataReceived += Listening;
-                return true;
+                if (!Connected)
+                {
+                    ComPort.Write("100");
+                }
+                Thread.Sleep(1000);
+                if (!Connected) ComPort.Close();
+                return Connected;
             }
             catch
             {
@@ -80,13 +88,31 @@ namespace WashingStatusRouter.Functions
             try
             {
                 byte[] buffer = new byte[ComPort.BytesToRead];
+                Console.WriteLine("Bytes length:" + ComPort.BytesToRead.ToString());
                 ComPort.Read(buffer, 0, ComPort.BytesToRead);
-                ReceiveMessageAction(Encoding.UTF8.GetString(buffer));
+                Console.WriteLine(Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", ""));
+                Console.WriteLine(Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", ""));
+                if (!Connected)
+                {
+                    if (Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", "") == "Y")
+                    {
+                        Connected = true;
+                    }
+                }
+                else if (Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", "") != "")
+                {
+                    ReceiveMessageAction(Encoding.UTF8.GetString(buffer).Replace("\n", "").Replace("\r", ""));
+                }
+                Thread.Sleep(100);
             }
             catch
             {
-                throw new NotImplementedException();
+                throw new Exception();
             }
         }
+        private ReceiveMessage ReceiveMessageAction = new ReceiveMessage((string Message) => {
+            MessageDetecter detecter = new MessageDetecter(Message);
+            MQTTEventTrigger.Client.SendMessage(detecter.TopicToMQTTServer, detecter.MessageToMQTTServer);
+        });
     }
 }

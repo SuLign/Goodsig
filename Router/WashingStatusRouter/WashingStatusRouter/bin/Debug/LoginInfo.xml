@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LoginInformation>
+  <Server IsSaved="true">
+    <ServerIP>121.36.85.182</ServerIP>
+    <Port>1883</Port>
+  </Server>
+  <User IsSaved="true">
+    <Username>arduino</Username>
+    <Password>passwd</Password>
+  </User>
+</LoginInformation>

@@ -13,7 +13,7 @@ namespace WashingStatusRouter.Functions
         public string ServerIPAddress;
         public int Port;
         public PubSubClient client;
-        public MiddleWare(){}
+        public MiddleWare() { }
         public MiddleWare(string UserName, string Password, string IPAddress, int Port)
         {
             this.UserName = UserName;
@@ -26,10 +26,14 @@ namespace WashingStatusRouter.Functions
             client = new PubSubClient();
             return (client.Connect("MiddleWare", ServerIPAddress, UserName, Password));
         }
+        public void SetCallBack(PubSubClient.ReceiveMessage receive)
+        {
+            client.GetReceive = receive;
+        }
     }
     class AMiddle
     {
-        private static Login loginForm;
+        public static Login loginForm;
         public static void InitLoginWindow(Login login)
         {
             loginForm = login;
@@ -40,20 +44,35 @@ namespace WashingStatusRouter.Functions
         {
             loginForm.ProgressLine.Visibility = System.Windows.Visibility.Visible;
             loginForm.ProgressLine.IsIndeterminate = true;
-            if (Middle.ConnectWithServer())
+            var MessageQueue = loginForm.SnackbarThree.MessageQueue;
+
+            Task.Factory.StartNew(() =>
             {
-                home = new GUI.HomeWindow();
-                MQTTEventTrigger.Transfer(home, Middle.client);
-                home.Show();
-                home.Activate(); 
-                loginForm.Close();
-            }
-            else
-            {
-                var MessageQueue = loginForm.SnackbarThree.MessageQueue;
-                Task.Factory.StartNew(() => MessageQueue.Enqueue("未能连接到服务器,请检查服务器地址和端口以及用户名密码是否正确"));
-                loginForm.ProgressLine.IsIndeterminate = false;
-            }
+                if (Middle.ConnectWithServer())
+                {
+                    Middle.client.SubScribe(new string []{ "Arduino/#","Console/#"});
+                    loginForm.Dispatcher.Invoke(() =>
+                    {
+                        home = new GUI.HomeWindow();
+                        MQTTEventTrigger.Transfer(home, Middle.client);
+                        home.Show();
+                        home.Activate();
+                        loginForm.Close();
+                    });
+                }
+                else
+                {
+                    Task.Factory.StartNew(() =>
+                    {
+                        MessageQueue.Enqueue("未能连接到服务器,请检查服务器地址和端口以及用户名密码是否正确");
+                        loginForm.Dispatcher.Invoke(() =>
+                        {
+                            loginForm.ProgressLine.IsIndeterminate = false;
+                            loginForm.ProgressLine.Visibility = System.Windows.Visibility.Hidden;
+                        });
+                    });
+                }
+            });
         }
     }
 }

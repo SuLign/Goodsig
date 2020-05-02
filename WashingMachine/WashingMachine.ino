@@ -484,7 +484,10 @@ void Accept() {
 }
 //处理请求
 void Request(int ReqID) {
-  if (washingStatus == 0) {
+  if (ReqID == 100) {
+    Serial.println("Y");
+  }
+  else if (washingStatus == 0) {
     switch (ReqID)
     {
       case 111:
@@ -560,8 +563,7 @@ void Listener::setup() {  //监听设定
 }
 
 void ComSerial::setup() {
-  
-  Serial.println(washingStatus);
+  Serial.println("0");
 }
 
 void Action::loop() {   //事务处理循环
@@ -604,25 +606,24 @@ void Listener::loop() {  //监听循环
 }
 
 void ComSerial::loop() {
-  
+
 }
 
 void setup() {
   Serial.begin(9600);
-  
+
   // put your setup code here, to run once:
   mySCoop.start();
 }
 
 void loop() {
   if (Serial.available() > 0) {
-    String readout ="";
+    String readout = "";
     while (Serial.available() > 0) {
       readout += char(Serial.read());
       delay(2);
     }
     if (readout.length() > 0) {
-      Serial.println(readout);
       Request(readout.toInt());
     }
   }
