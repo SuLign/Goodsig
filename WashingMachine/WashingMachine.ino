@@ -127,11 +127,13 @@ void Wash_MotorWork(int level) {
       break;
   }
   for (int i = 0; i < cycle; i++) {
-    digitalWrite(MotorReg, HIGH);
+    analogWrite(MotorReg, 50);
+    //digitalWrite(MotorReg, HIGH);
     sleep(2000);
     digitalWrite(MotorReg, LOW);
     sleep(1000);
-    digitalWrite(MotorRes, HIGH);
+    analogWrite(MotorRes, 50);
+    //digitalWrite(MotorRes, HIGH);
     sleep(2000);
     digitalWrite(MotorRes, LOW);
     sleep(1000);
@@ -300,6 +302,11 @@ void DoFunction(int Index) {
   }
 }
 
+/*  模块名称：执行进行中任务
+ *  模块说明：
+ *     当洗衣机处于运行状态时，可对洗衣机发出：暂停、继续、终止和返回主页菜单三种指令
+
+*/
 //执行进行中任务
 void WorkingFunction(int Index) {
   switch (Index) {
@@ -341,21 +348,58 @@ void WorkingFunction(int Index) {
       break;
   }
 }
-
+/* 模块名称：矩阵键盘编码按钮信号
+   模块说明：
+      在该模块中，对读取到的三个按钮信号引脚的电平信号进行编码，规定：低电平为1，高电平为0，通过5个按钮输入的信号，按照二进制编码，可有(000)、(001)、(010)、(011)、(100)、(101)一共6种组合信号，再将其转换为十进制，可以得到0-5。
+      Arduino使用循环loop方法中的程序段实现连续性的运作，由于Arduino的loop执行频率很高，当按钮按下时不能做到只通过单个有效的电平信号，同时，在一次按钮按下时，可能会出现多次接触，进而产生多个信号，干扰正常操作流程，故此，需要做抖动处理：
+      首先降低定义当前的信号位状态Sig,上一个信号位状态位SigBefore，当第一个信号输入时，将其赋值给SigBefore，之后如若Sig与SigBefore不相等时，则判断Sig为有效输入信号，将Sig作为函数参数，传递给按钮功能执行函数，实现其对应功能，再将Sig的值赋值给SigBefore；如若Sig与SigBefore相等时,不做任何处理，将Sig的值赋值给SigBefore。
+*/
 //矩阵键盘编码
 void Decode() {
   int Sig1 = digitalRead(OrderButtonSignal1);
   int Sig2 = digitalRead(OrderButtonSignal2);
   int Sig3 = digitalRead(OrderButtonSignal3);
   int Sig = (Sig1 == HIGH ? 0 : 1) * 4 + (Sig2 == HIGH ? 0 : 1) * 2 + (Sig3 == HIGH ? 0 : 1) * 1; /*信号编码转为十进制*/
-  if (SigBefore != Sig) {   /*矩阵键盘编码防抖动*/
+  /*矩阵键盘编码防抖动*/
+  if (SigBefore != Sig) {
     OrderButtonFunction(Sig);
   }
-  delay(50);
+  sleep(50);
   SigBefore = Sig;
 }
 
 //矩阵编码控制
+/* 模块名称：矩阵编码控制
+   模块说明：
+      该函数取用编码后的按钮信号，取用0-5一共6种信号状态，按钮和对应的信号值以及对应功能匹配关系如表：//表格
+      首先需要判断当前菜单是否可执行操作：当洗衣状态为：待机中，即washingStatus为0时，可执行以下操作：
+      1.选项光标下移操作：
+          通过菜单页表中可以获取到当前显示页面菜单项目栏数ListCount，如果光标位置OrderIndex小于菜单项目栏数ListCount，即光标还未到菜单底部，可以下移，将OrderIndex值加1，若OrderIndex等于菜单项目栏数ListCount，则回到第一项，即将OrderIndex的值设为1，将OrderIndex作为函数参数传递给菜单刷新函数setOrder。
+      2.选项光标上移操作：
+          通过菜单页表中可以获取到当前显示页面菜单项目栏数ListCount，如果光标位置OrderIndex大于1，即光标还未到菜单顶部，可以上移，将OrderIndex值加1，若OrderIndex等于1，则跳转到最后一项，即将OrderIndex的值设为菜单项目栏数ListCount，将OrderIndex作为函数参数传递给菜单刷新函数setOrder。
+      3.确定选择当前选项：
+          参考《菜单表逻辑》，判断当前菜单是否为主菜单，若为主菜单，则：
+              目标菜单页码 = 当前菜单页码 * 10 + 当前选项光标位置
+          将当前光标位置复位到1，跳转至目标菜单；
+          若当前菜单为子菜单，则：
+              目标功能编号 = 当前菜单页码 * 10 + 当前选项光标位置
+          由于同级子菜单功能执行页面显示窗口一致，故：
+              目标功能显示 = 当前菜单页码 * 10
+          将当前光标位置复位到1，跳转至目标窗口
+      4.返回上级菜单：
+          判断当前菜单页面是否为主菜单，若为主菜单，不做任何处理，反之
+              目标菜单页码 = 取整[当前菜单页码 / 10]
+          将当前光标位置复位到1，跳转至目标菜单
+      5.返回主页
+          跳转至主菜单，光标位置复位到1
+      若洗衣状态为：已完成洗衣，则按下任意按钮回到主菜单
+      若为其他洗衣状态：
+      1.选项光标下移
+      2.选项光标上移
+      3.执行选中指令
+      5.取消当前正在执行任务
+
+*/
 void OrderButtonFunction(int Signal) {
   if (washingStatus == 0) {
     switch (Signal) {
@@ -384,14 +428,14 @@ void OrderButtonFunction(int Signal) {
         break;
       /*编码 003  选项确定*/
       case 3:
-        if (ListPageIndex / 10 == 1) {
+        if (ListPageIndex / 10 == 1) {//子菜单
           DoFunction(ListPageIndex * 10 + OrderIndex);
           ListPageIndex = ListPageIndex * 10;
           OrderIndex = 1;
           SetupOrderList(ListPageIndex);
           setOrder(OrderIndex);
         }
-        else {
+        else {//主菜单
           ListPageIndex = ListPageIndex * 10 + OrderIndex;
           OrderIndex = 1;
           SetupOrderList(ListPageIndex);
@@ -426,18 +470,12 @@ void OrderButtonFunction(int Signal) {
   }
   /*完成洗衣返回确认*/
   else if (washingStatus == 9) {
-    switch (Signal) {
-      case 3:
-        washingStatus = 0;
-        actionTrigger = 0;
-        ListPageIndex = 1;
-        OrderIndex = 1;
-        SetupOrderList(ListPageIndex);
-        setOrder(OrderIndex);
-        break;
-      default:
-        break;
-    }
+    washingStatus = 0;
+    actionTrigger = 0;
+    ListPageIndex = 1;
+    OrderIndex = 1;
+    SetupOrderList(ListPageIndex);
+    setOrder(OrderIndex);
   }
   else {
     switch (Signal) {
@@ -462,9 +500,11 @@ void OrderButtonFunction(int Signal) {
         break;
       /*编码 003  选项确定*/
       case 3:
-
         if (ListPageIndex == 2) WorkingFunction(3);
         else WorkingFunction(OrderIndex);
+        break;
+      case 5:
+        WorkingFunction(2);
         break;
       default:
         break;
@@ -484,7 +524,7 @@ void Accept() {
 }
 //处理请求
 void Request(int ReqID) {
-  if (ReqID == 100) {
+  if (ReqID == 100) {//在线状态反馈
     Serial.println("Y");
   }
   else if (washingStatus == 0) {
@@ -524,7 +564,7 @@ void Request(int ReqID) {
       case 9:
         if (washingStatus == 9) {
           Accept();
-          WorkingFunction(9);
+          OrderButtonFunction(3);//模拟按钮输入确认指令
         }
         else {
           Refuse();

@@ -17,7 +17,6 @@ namespace WashingStatusRouter.GUI
         {
             HomePageTransitioner.SelectedIndex = HomePageTransitioner.SelectedIndex == 1?0:1;
         }
-
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FormFunction.MoveForm(sender, e, this);

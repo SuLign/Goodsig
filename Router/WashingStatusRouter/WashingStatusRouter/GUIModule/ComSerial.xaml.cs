@@ -37,7 +37,6 @@ namespace WashingStatusRouter.GUIModule
             {
                 Task.Factory.StartNew(() => AMiddle.home.SnackbarThree.MessageQueue.Enqueue("读取串口信息失败"));
             }
-
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {

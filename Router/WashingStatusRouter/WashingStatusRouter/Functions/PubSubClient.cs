@@ -18,7 +18,6 @@ namespace WashingStatusRouter.Functions
                 IpAddress = MqttServerIPAddress,
                 Credentials = new MqttCredential(Credential_Username, Credential_Password)
             });
-
             try
             {
                 if (client.ConnectServer().IsSuccess) //连接成功

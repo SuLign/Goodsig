@@ -22,10 +22,6 @@ namespace WashingStatusRouter.Functions
             client = new PubSubClient();
             return (client.Connect("MiddleWare", ServerIPAddress, UserName, Password));
         }
-        //public void SetCallBack(PubSubClient.ReceiveMessage receive)
-        //{
-        //    client.GetReceive = receive;
-        //}
     }
     class AMiddle
     {
@@ -41,7 +37,6 @@ namespace WashingStatusRouter.Functions
             loginForm.ProgressLine.Visibility = System.Windows.Visibility.Visible;
             loginForm.ProgressLine.IsIndeterminate = true;
             var MessageQueue = loginForm.SnackbarThree.MessageQueue;
-
             Task.Factory.StartNew(() =>
             {
                 if (Middle.ConnectWithServer())

@@ -21,7 +21,6 @@ namespace WashingStatusRouter
         {
             Application.Current.Shutdown();
         }
-
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FormFunction.MoveForm(sender, e, this);

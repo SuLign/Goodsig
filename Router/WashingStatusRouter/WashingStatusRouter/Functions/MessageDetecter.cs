@@ -7,10 +7,6 @@ namespace WashingStatusRouter.Functions
         private string id;
         private string topic;
         private string result;
-        //public string ResultToDisplayBack
-        //{
-        //    get { return result; }
-        //}
         public string MessageToMQTTServer
         {
             get { return id; }
