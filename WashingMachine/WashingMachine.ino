@@ -185,6 +185,10 @@ void StopMotor() {
   digitalWrite(MotorRes, LOW);
 }
 
+/*  模块名称：绘制显示内容
+ *  模块说明：该模块中可以完成对
+ * 
+*/
 //绘制显示内容
 void setOrder(int chosed) {
   /*===================显示菜单====================
@@ -216,6 +220,10 @@ void setOrder(int chosed) {
   } while (u8g2.nextPage());
 }
 
+/*   模块名称:菜单显示内容预设
+     模块说明：
+        该模块中规定了每个菜单页面的页码，以及每个菜单页面的显示内容，关系如下图
+*/
 //菜单内容控制
 void SetupOrderList(int Page) {
   /* ==============菜单控制逻辑============
@@ -283,6 +291,10 @@ void SetupOrderList(int Page) {
   }
 }
 
+/*  模块名称：菜单任务执行
+    模块说明:
+       该模块通过传递回的参数，执行相应洗衣操作
+*/
 //执行菜单任务
 void DoFunction(int Index) {
   switch (Index) {
@@ -302,10 +314,19 @@ void DoFunction(int Index) {
   }
 }
 
-/*  模块名称：执行进行中任务
- *  模块说明：
- *     当洗衣机处于运行状态时，可对洗衣机发出：暂停、继续、终止和返回主页菜单三种指令
+/*重置函数*/
+void(* resetFunc) (void) = 0;
 
+/*  模块名称：执行进行中任务
+    模块说明：
+       当洗衣机处于运行状态时，可对洗衣机发出：暂停、继续、终止和返回主页菜单4种指令
+    1.暂停指令：
+       在洗衣过程中，偶尔会需要中途暂停当前洗衣却不影响整个洗衣流程时，可以使用暂停功能。SCoop库中提供了子线程的暂停函数，可以在监视线程中通过调用pause()函数实现对作业线程进行暂停操作，保存当前菜单页面，跳转进入暂停页面，同时关闭电机，进而达到暂停当前洗衣作业的效果。
+    2.停止指令：
+       当洗衣中途需要停止当前洗衣作业时，可使用停止指令终止当前的工作。此设计中所使用的SCoop库并未提供线程的重置方法，通常在停止洗衣时，都是终止当前操作，返回到最开始状态，故此，重置Arduino本身也可以实现。Arduino中内置了一个名为resetFunc()的函数，可以通过声明该函数地址为0，当调用该函数时可以达到重置Arduino的作用。
+    3.继续指令：
+       当暂停洗衣后，继续执行之前暂停的洗衣任务，可以通过继续指令实现。调用SCoop库中提供的resume()函数可以实现使子线程继续执行，实现继续作业的效果。
+    9.当洗衣完成后，跳转至完成页面，等待继续操作。
 */
 //执行进行中任务
 void WorkingFunction(int Index) {
@@ -322,12 +343,7 @@ void WorkingFunction(int Index) {
       break;
     /*终止*/
     case 2:
-      Action.pause();
-      StopMotor();
-      ListPageIndex = 1;
-      OrderIndex = 1;
-      SetupOrderList(ListPageIndex);
-      setOrder(OrderIndex);
+      resetFunc();
       break;
     /*继续*/
     case 3:
@@ -538,6 +554,10 @@ void Request(int ReqID) {
       case 123:
         Accept();
         DoFunction(ReqID);
+        ListPageIndex = (ReqID / 10) * 10;
+        OrderIndex = 1;
+        SetupOrderList(ListPageIndex);
+        setOrder(OrderIndex);
         break;
       default:
         Refuse();
